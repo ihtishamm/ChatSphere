@@ -4,28 +4,28 @@ Welcome to the "chatpdf-yt" project, a comprehensive chat application with PDF i
 
 hi this is a test change!
 
-## Technologies and Frameworks
+# Technologies and Frameworks
 
-Next.js
-React
-TypeScript
-Tailwind CSS
-Clerk
-Drizzle ORM
-PostgreSQL
-AWS SDK
-OpenAI API
-Stripe
-Axios
-Pinecone
-Drizzle-kit
-OpenAI Edge
-Neon Database Serverless
-Drizzle-orm/neon-http
-@tanstack/react-query
-@clerk/nextjs
-clsx
-tailwind-merge
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Clerk
+- Drizzle ORM
+- PostgreSQL
+- AWS SDK
+- OpenAI API
+- Stripe
+- Axios
+- Pinecone
+- Drizzle-kit
+- OpenAI Edge
+- Neon Database Serverless
+- Drizzle-orm/neon-http
+- @tanstack/react-query
+- @clerk/nextjs
+- clsx
+- tailwind-merge
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
