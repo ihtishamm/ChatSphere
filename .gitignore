@@ -12,7 +12,7 @@
 
 # testing
 /coverage
-
+tempnpm-cache/
 # next.js
 /.next/
 /out/
