@@ -2,10 +2,20 @@
 import { Pinecone } from '@pinecone-database/pinecone';
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { downloadFromS3 } from "./s3-server";
+import md5 from "md5";
 import {
     Document,
     RecursiveCharacterTextSplitter,
   } from "@pinecone-database/doc-splitter";
+import { getEmbedding } from './embeddings';
+import { convertToAscii } from './helper';
+
+  type PDFPage = {
+    pageContent: string;
+    metadata: {
+      loc: { pageNumber: number };
+    };
+  };
 
 export const getPineconeClient = async () => {
    
@@ -16,12 +26,7 @@ export const getPineconeClient = async () => {
     return pc;
 }
 
-type PDFPage = {
-    pageContent: string;
-    metadata: {
-      loc: { pageNumber: number };
-    };
-  };
+
 
 
 export async function loadS3IntoPinecone(file_key:string){
@@ -33,12 +38,49 @@ export async function loadS3IntoPinecone(file_key:string){
          throw new Error("file not found");
      }
      const loader = new PDFLoader(file_name);
+     console.log(loader,'loader')
      const pages = (await loader.load()) as PDFPage[];
-     // 2. split and segment the pdf 
-        const documents = await Promise.all(pages.map(prepareDocument));
-      // 2. vectorize and embed individual documents
+      // console.log('pages',pages)
    
+     console.log("splitting and segmenting pdf");
+        const documents = await Promise.all(pages.map(prepareDocument))
+
+      // 3. vectorize and embed individual documents
+        console.log("embedding documents");
+      const vectors = await Promise.all(documents.flat().map(embedDocument));
+  
+
+      const Client = await getPineconeClient();
+      const pinceconeIndex =  Client.Index("chatsphere");
+      console.log('inserting vectors into pinecone')
+
+      const nameSpace = convertToAscii(file_key);
+
+   const result =   await pinceconeIndex.namespace(nameSpace).upsert(vectors);
+
+  return documents[0]
 }
+
+  async function embedDocument(doc:Document){
+     try {
+        const embeddings = await getEmbedding(doc.pageContent);
+      
+        const hash = md5(doc.pageContent);
+        return {
+         id: hash,
+         values:embeddings,
+         metadata:{
+          text:doc.metadata.text as string,
+          pageNumber:doc.metadata.pageNumber as number
+         }
+        } 
+     } catch (error) {
+         console.log('error embedding document',error)
+         throw error
+        
+     }
+  }
+
 
 export const truncateStringByBytes = (str: string, bytes: number) => {
     const enc = new TextEncoder();
@@ -62,3 +104,7 @@ export const truncateStringByBytes = (str: string, bytes: number) => {
     ]);
     return docs;
   }
+
+  
+ 
+  

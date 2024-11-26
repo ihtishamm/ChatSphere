@@ -4,7 +4,7 @@ import { drizzle } from 'drizzle-orm/neon-http';
 neonConfig.fetchConnectionCache = true
 config({ path: ".env" }); 
 
-if (!process.env.DATABASE_UR){
+if (!process.env.DATABASE_URL){
     throw new Error('DATABASE url not found')
 }
 
