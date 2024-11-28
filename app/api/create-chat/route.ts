@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const  {file_key, file_name} = body;
-   await loadS3IntoPinecone(file_key);
- const chat_id =    await db.insert(chats).values({
+    await loadS3IntoPinecone(file_key);
+ const chat_id = await db.insert(chats).values({
       fileKey:file_key,
       pdfName:file_name,
       pdfUrl:getS3Url(file_key),
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({chat_id:chat_id[0].insertedId}, {status:200});
 
-  
+
         
    } catch (error) {
      console.log(error);

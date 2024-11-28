@@ -1,35 +1,27 @@
-import { OpenAIApi, Configuration } from "openai-edge";
+import { HfInference } from '@huggingface/inference';
 
-const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const HF_API_KEY = process.env.NEXT_PUBLIC_Huggingface_API_KEY || '';
 
-const openai = new OpenAIApi(config);
+const hf = new HfInference(HF_API_KEY);
 
-export async function getEmbedding(text: string) {
-  text = text.replace(/\s+/g, " ").trim();
+export async function getEmbedding(text: string): Promise<number[]> {
+  text = text.replace(/\s+/g, " ").trim(); 
+
   try {
-    const response = await openai.createEmbedding({
-      model: "text-embedding-ada-002",
-      input: text.replace(/\n/g, " "),
+    const response = await hf.featureExtraction({
+      model: 'sangmini/msmarco-cotmae-MiniLM-L12_en-ko-ja',
+      inputs: text.replace(/\n/g, " "),
     });
 
-    if (!response.ok) {
-      console.error(`OpenAI API Error: ${response.statusText}`, await response.text());
-      throw new Error(`OpenAI API error: ${response.statusText}`);
+    // Validate response
+    if (!Array.isArray(response)) {
+      console.error("Invalid response structure from Hugging Face API", response);
+      throw new Error("Invalid embedding response from Hugging Face API");
     }
 
-    const result = await response.json();
-    const embedding = result?.data?.[0]?.embedding;
-
-    if (!embedding) {
-      console.error("Invalid response structure from OpenAI API", result);
-      throw new Error("Invalid embedding response from OpenAI API");
-    }
-
-    return embedding as number[];
+    return response.flat() as number[];
   } catch (error) {
-    console.error("Error calling OpenAI embeddings API", error);
+    console.error("Error calling Hugging Face embeddings API", error);
     throw error;
   }
 }

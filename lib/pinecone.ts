@@ -40,13 +40,11 @@ export async function loadS3IntoPinecone(file_key:string){
      const loader = new PDFLoader(file_name);
      console.log(loader,'loader')
      const pages = (await loader.load()) as PDFPage[];
-      // console.log('pages',pages)
+      
    
-     console.log("splitting and segmenting pdf");
         const documents = await Promise.all(pages.map(prepareDocument))
 
       // 3. vectorize and embed individual documents
-        console.log("embedding documents");
       const vectors = await Promise.all(documents.flat().map(embedDocument));
   
 
@@ -56,7 +54,7 @@ export async function loadS3IntoPinecone(file_key:string){
 
       const nameSpace = convertToAscii(file_key);
 
-   const result =   await pinceconeIndex.namespace(nameSpace).upsert(vectors);
+    await pinceconeIndex.namespace(nameSpace).upsert(vectors);
 
   return documents[0]
 }
@@ -64,7 +62,6 @@ export async function loadS3IntoPinecone(file_key:string){
   async function embedDocument(doc:Document){
      try {
         const embeddings = await getEmbedding(doc.pageContent);
-      
         const hash = md5(doc.pageContent);
         return {
          id: hash,
