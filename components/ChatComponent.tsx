@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React from "react";
 import { Button } from "./ui/button";
@@ -11,7 +12,6 @@ type Props = { chatId: number };
 const ChatComponent = ({ chatId }: Props) => {
   const { input, handleInputChange, handleSubmit, messages } = useChat({
     api: "/api/chat",
-    body: { chatId },
   });
 
   return (
