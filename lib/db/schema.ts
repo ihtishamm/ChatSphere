@@ -20,7 +20,7 @@ import {
     fileKey: text("file_key").notNull(),
   });
 
-  
+  export type DrizzleChat = typeof chats.$inferSelect;
   export const messages = pgTable("messages", {
     id: serial("id").primaryKey(),
     chatId: integer("chat_id")
