@@ -1,27 +1,21 @@
-import { HfInference } from '@huggingface/inference';
+import { OpenAIApi, Configuration } from "openai-edge";
 
-const HF_API_KEY = process.env.NEXT_PUBLIC_Huggingface_API_KEY || '';
+const config = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-const hf = new HfInference(HF_API_KEY);
+const openai = new OpenAIApi(config);
 
-export async function getEmbedding(text: string): Promise<number[]> {
-  text = text.replace(/\s+/g, " ").trim(); 
-
+export async function getEmbedding(text: string) {
   try {
-    const response = await hf.featureExtraction({
-      model: 'sangmini/msmarco-cotmae-MiniLM-L12_en-ko-ja',
-      inputs: text.replace(/\n/g, " "),
+    const response = await openai.createEmbedding({
+      model: "text-embedding-ada-002",
+      input: text.replace(/\n/g, " "),
     });
-
-    // Validate response
-    if (!Array.isArray(response)) {
-      console.error("Invalid response structure from Hugging Face API", response);
-      throw new Error("Invalid embedding response from Hugging Face API");
-    }
-
-    return response.flat() as number[];
+    const result = await response.json();
+    return result.data[0].embedding as number[];
   } catch (error) {
-    console.error("Error calling Hugging Face embeddings API", error);
+    console.log("error calling openai embeddings api", error);
     throw error;
   }
 }
