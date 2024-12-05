@@ -1,17 +1,19 @@
 "use client";
 import { DrizzleChat } from "@/lib/db/schema";
 import Link from "next/link";
-import React from "react";
 import { Button } from "./ui/button";
 import { MessageCircle, PlusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import SubscriptionButton from "./SubscriptionButton";
 
 type Props = {
   chats: DrizzleChat[];
   chatId: number;
+  isPro: boolean;
 };
 
-const ChatSideBar = ({ chats, chatId }: Props) => {
+const ChatSideBar = ({ chats, chatId, isPro }: Props) => {
+
   return (
     <div className="w-full h-full max-h-screen bg-gray-900 text-gray-200 flex flex-col">
       {/* New Chat Button */}
@@ -46,6 +48,7 @@ const ChatSideBar = ({ chats, chatId }: Props) => {
         <div className="flex items-center justify-between text-sm">
           <Link href="/">Home</Link>
           <Link href="/about">Source</Link>
+         <SubscriptionButton isPro={isPro} />
         </div>
       </div>
     </div>
