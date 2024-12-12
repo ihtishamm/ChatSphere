@@ -17,7 +17,7 @@ const ChatSideBar = ({ chats, chatId, isPro }: Props) => {
   return (
     <div className="w-full h-full max-h-screen bg-gray-900 text-gray-200 flex flex-col">
       {/* New Chat Button */}
-      <Link href="/">
+      <Link href="/uploadpdf">
         <Button className="w-full border-dashed border-white border mb-4 mt-4">
           <PlusCircle className=" w-4 h-4" />
           New Chat
