@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       }
    try {
     const body = await req.json();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
     const  {file_key, file_name} = body;
     await loadS3IntoPinecone(file_key);
  const chat_id = await db.insert(chats).values({
