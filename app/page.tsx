@@ -32,8 +32,8 @@ export default function Home() {
             </Link>
           </nav>
           <div className="hidden lg:flex items-center space-x-2 ml-4">
-            <Button variant="outline">Log In</Button>
-            <Button>Sign Up</Button>
+          <Link  href="/uploadpdf">  <Button variant="outline">Log In</Button></Link>
+          
           </div>
           <button
             className="ml-4 lg:hidden"
@@ -65,14 +65,11 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link href="/uploadpdf">
-                  <Button size="lg" className="inline-flex items-center justify-center transition-transform hover:scale-105">
+                  <Button size="lg" className="inline-flex items-center justify-center transition-transform hover:scale-105 w-full">
                     Get Started
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                   </Link>
-                  <Button size="lg" variant="outline" className="transition-transform hover:scale-105">
-                    Watch Demo
-                  </Button>
                 </div>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 text-sm">
                   <div className="flex items-center">
